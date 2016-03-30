@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="box" style="background-color: red; width: 100px; height: 100px;">
+			1111111
+		</div>
+	</body>
+	<script src="js/zepto.min.js"></script>
+	<script>
+		var a = function(){};
+		a.prototype.num = 1;
+		a.prototype = {
+			num : 2,
+			name: 'duchao'
+		}
+//		console.log(typeof a.prototype);
+		
+		function asset (value, meg){
+			if( !value ){
+				console.log(meg);
+				throw(meg || (value +  ' does not equal true 1111 '));
+			}
+		}
+		
+		var b = 1;
+		asset(b);
+		
+		/*
+		 * ---------------------------------------------------------
+		 */
+		var Class = function (parent) {
+			var klass = function(){
+				this.init.apply(this, arguments);
+			};
+			if (parent) {
+				var subclass = function () {};
+				subclass.prototype = parent.prototype;
+				klass.prototype = new subclass;
+				klass.prototype.constructor = klass;
+			}
+			
+			klass.prototype.init = function () {};
+			
+			klass.fn = klass.prototype;
+			klass.fn.parent = klass;
+			klass._super = klass.__proto__;
+			
+			klass.proxy = function (func) {
+				var self = this;
+				return (function(){
+					return func.apply(self, arguments);
+				});
+			}
+			klass.fn.proxy = klass.proxy;
+			
+			//给类添加属性
+			klass.extend = function (obj) {
+				var extended = obj.extended;
+				for( var i in obj){
+					klass[i] = obj[i];
+				}
+				if (extended) extended(klass);
+			}
+			
+			//给实例添加属性
+			klass.include = function (obj) {
+				var included = obj.included;
+				for( var i in obj){
+					klass.fn[i] = obj[i];
+				}
+				if (included) included(klass);
+			}
+			
+			return klass;
+		};
+		
+		var ORMModule = {
+			find: function (id) {
+				console.log('find ' + id);
+			},
+			exists: function (id){
+				console.log( 'exists ' + id);
+			}
+		};
+		
+		var ORMFn = {
+			save: function(id){
+				console.log(' save ' + id);
+			},
+			destroy: function(id){
+				console.log('destroy ' + id);
+			}
+		};
+		
+		var Person = new Class;
+		var Asset = new Class(Person);
+		
+		Person.extend(ORMModule);
+		
+		Person.include(ORMFn);
+		Asset.include(ORMFn);
+
+		var asset = new Asset();
+
+		console.log(asset.constructor == Asset.prototype.constructor);
+		asset.save(33);
+		
+		var Button = new Class;
+		Button.include({
+			init: function(ele){
+				this.ele = $(ele);
+				this.ele.click(this.proxy(this.click));
+				console.log(this);
+			},
+			click: function(){
+				console.log(this);
+			}
+		});
+		
+		var but = new Button('#box',2222,'333333');
+
+		$('#box').click(aclick(bclick));
+		
+		function aclick(func){
+			return(function(){
+				return func;
+			});
+		}
+		
+		function bclick(){
+			console.log(1231231);
+		}
+	</script>
+</html>

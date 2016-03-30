@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>vue.js</title>
+		<style>
+			.hide{
+				/*visibility: hidden;*/
+			}
+		</style>
+	</head>
+	<body>
+		<div id="example" class="hide">
+			<div v-if="Math.random() > 0.5" class="static" v-on:click="greet" v-bind:style="{width: w, height: h, backgroundColor:color,}" v-bind:class="{ 'class-a': isA, 'class-b': isB}">11111</div>
+			<div v-else>Not sorry</div>
+			<ul>
+				<li v-for="item in items">{{ item.message }}</li>
+			</ul>
+			<input type="radio" id="one" value="One" v-model="picked">
+			<label for="one">One</label>
+			<br>
+			<input type="radio" id="two" value="Two" v-model="picked">
+			<label for="two">Two</label>
+			<br>
+			<input
+			  type="checkbox"
+			  v-model="toggle"
+			  v-bind:true-value="a"
+			  v-bind:false-value="b">{{toggle}}-322
+			  
+			  <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+			<label for="jack">Jack</label>
+			<input type="checkbox" id="john" value="John" v-model="checkedNames">
+			<label for="john">John</label>
+			<input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+			<label for="mike">Mike</label>
+			<br>
+			<span>Checked names: {{ checkedNames | json }}</span>
+			
+			<select v-model="selected">
+			  <!-- 对象字面量 -->
+			  <option v-bind:value="{ num: 1 }">123</option>
+			</select>
+			{{ selected.num }}
+		</div>
+	</body>
+	<script src="js/zepto.min.js"></script>
+	<script src="js/vue.js"></script>
+	<script>
+		
+		var data = {
+			toggle: true,
+			selected: '',
+			isA: true,
+			isB: false,
+			w: '100px',
+			h: '200px',
+			color: 'aquamarine',
+			items: [
+				{message: '1'},
+				{message: '2'}
+			],
+			checkedNames: []
+		}
+		var vm = new Vue({
+			el: '#example',
+			data: data,
+			created: function (){
+				
+			},
+			methods: {
+				greet: function(e){
+					alert('他那弹弹');
+					alert(e.target.className);
+				}
+			}
+		});
+		   
+		
+		var a = function(){};
+		console.log(a.prototype);
+		
+		var obj = {
+			a: '1',
+			b: '2',
+			c: '3'
+		};
+		console.log(Object.keys(obj));
+		
+//		var pp = {
+//			_name: '111',
+//			set name(n){
+//				this._name = n;
+//			},
+//			get name(){
+//				return this._name;
+//			}
+//		}
+//		console.log(pp.name + '---' + pp._name);
+		
+	</script>
+</html>

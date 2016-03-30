@@ -1,0 +1,101 @@
+<!doctype html>
+
+    <head>
+        
+        <base href="http://squad451.oblio.io/index.php" />
+        
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Hunger Games Case Study</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+
+
+    </head>
+    <body class="prod">
+
+        <div id="shell" class="absFull epk"></div>
+
+        <div id="prepreloader_wrapper" class="loading">
+            <div id="prepreloader">
+                <h1>LOADING</h1>
+                <canvas id="pixiCanvas" style="background-color: red; width: 1000px; height: 1000px;"></canvas>
+            </div>
+        </div>
+
+    </body>
+    
+    <script src="js/pixi.js"></script>
+    <script>
+    	var canvas = document.getElementById("pixiCanvas")
+    	
+    	function a(e) {
+			var t = document.createElement("canvas"),
+				n = t.getContext("2d"),
+				r = 200,
+				i, s, o = this.podPositions,
+				u = function(n) {
+					while (r) i = Math.floor(Math.random() * t.width), s = Math.floor(Math.random() * t.height), n[3 + s * t.width * 4 + i * 4] === 0 && (o.push({
+						x: i / t.width,
+						y: s / t.height
+					}), r--);
+					e()
+				},
+				a = new Image;
+			a.addEventListener("load", function() {
+				t.width = a.width, t.height = a.height, n.drawImage(a, 0, 0);
+				var e = n.getImageData(0, 0, a.width, a.height);
+				u(e.data)
+			}, !1), a.crossOrigin = "anonymous", a.src = "assets/images/marquee/backgrounds/map.png"
+		}
+    	
+    	function f(e) {
+			var t = canvas,
+//				n = document.getElementById("marquee").getBoundingClientRect(),
+				r = window.innerWidth,
+				i = window.innerHeight;
+			console.log("++++++++++++", r, i), this.speeds = {
+				city: {
+					vx: 0,
+					vy: .5
+				},
+				grid: {
+					vx: .5,
+					vy: .5
+				}
+			}, this.maskObj = {
+				scanRects: [],
+				scanCircs: [{
+					x: 0,
+					y: 0,
+					radius: 0
+				}]
+			}, t.style.background = "transparent", t.style.width = r + "px", t.style.height = i + "px", this.stage = new PIXI.Container, this.paused = !1, this.scale = window.devicePixelRatio, this.renderer = new PIXI.autoDetectRenderer(r, i, {
+				resolution: this.scale,
+				transparent: !0,
+				antialias: !0,
+				view: t
+			}), this.moveCount = 0, this.tilingSprite = new PIXI.extras.TilingSprite(this.loader, r, i), this.stage.addChild(this.tilingSprite), this.wireframeSprite = new PIXI.extras.TilingSprite(this.loader, r, i), this.wireframeSprite.blendMode = PIXI.BLEND_MODES.NORMAL, this.stage.addChild(this.wireframeSprite);
+			var s = PIXI.Texture.fromCanvas(h());
+			this.gridSprite = new PIXI.extras.TilingSprite(s, r, i), this.gridSprite.alpha = .25, this.stage.addChild(this.gridSprite), this.wireframeMask = new PIXI.Graphics, this.stage.addChild(this.wireframeMask), this.wireframeSprite.mask = this.wireframeMask, this.activePod = new PIXI.Texture.fromFrame("dimPod.png"), this.brightPod = new PIXI.Texture.fromFrame("brightPod.png"), this.deadPod = new PIXI.Texture.fromFrame("deadPod.png"), this.podContainer = new PIXI.Container, this.scanPodContainer = new PIXI.Container;
+			var o, u;
+			for (var a = this.podPositions.length - 1; a >= 0; a--) u = this.podPositions[a].dead ? this.deadPod : this.activePod, o = new PIXI.Sprite(u), o.position.x = this.podPositions[a].x * this.tilingSprite.texture.width, o.position.y = this.podPositions[a].y * this.tilingSprite.texture.height, this.podContainer.addChild(o), this.podPositions[a].dead || (o = new PIXI.Sprite(this.brightPod), o.position.x = this.podPositions[a].x * this.tilingSprite.texture.width, o.position.y = this.podPositions[a].y * this.tilingSprite.texture.height, this.scanPodContainer.addChild(o));
+			var f = this.podContainer.generateTexture(this.renderer),
+				l = this.scanPodContainer.generateTexture(this.renderer);
+			this.podSprite = new PIXI.extras.TilingSprite(f, r, i), this.podScanSprite = new PIXI.extras.TilingSprite(l, r, i), this.stage.addChild(this.podSprite), this.wireframeSprite.addChild(this.podScanSprite), this.frameMask = new PIXI.Graphics, this.stage.mask = this.frameMask, t.style.opacity = 0, e()
+		}
+    	
+    	function h() {
+			var e = document.createElement("canvas"),
+				t = e.getContext("2d");
+			return e.width = 10, e.height = 10, t.strokeStyle = "rgba(255,255,255,.5)", t.beginPath(), t.moveTo(10, 0), t.lineTo(10, 10), t.lineTo(0, 10), t.stroke(), e
+		}
+    	
+    	a();
+    	f();
+    	h();
+    	
+    </script>
+    
+</html>

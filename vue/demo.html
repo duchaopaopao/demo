@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-touch-fullscreen" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<title></title>
+		<link rel="stylesheet" href="css/animate.css" />
+		<style>
+			ul{ overflow: hidden; padding: 0; margin: 0;}
+			li{display: block ; width: 40%; float: left; margin-right: 5%; height: 200px ; background-color: #e7e7e7; list-style: none;}
+			li img{display: block ; max-width: 100% ; display: block; height: 100% ;}
+		</style>
+	</head>
+	<body>
+		
+		<ul>
+			<li id="yourElement" class="animated bounceOutLeft">
+				<div>div1</div>
+				<a href="#"><img class="lazyload" src="img/list-inv-1.jpg" alt="1" /></a>
+			</li>
+			<li>
+				<div>div2</div>
+				<a href="#"><img class="lazyload" src="img/list-inv-2.jpg" alt="2" /></a>
+			</li>
+			<li>
+				<div>div3</div>
+				<a href="#"><img class="lazyload" src="img/list-inv-3.jpg" alt="3" /></a>
+			</li>
+			<li>
+				<div>div4</div>
+				<a href="#"><img class="lazyload" src="img/list-inv-4.jpg" alt="4" /></a>
+			</li>
+			<li>
+				<div>div5</div>
+				<a href="#"><img class="lazyload" src="img/list-inv-5.jpg" alt="5" /></a>
+			</li>
+			<li>
+				<div>div6</div>
+				<a href="#"><img class="lazyload" src="img/list-inv-6.jpg" alt="6" /></a>
+			</li>
+		</ul>
+		
+	</body>
+	
+	<script src="js/picLazyLoad.js"></script>
+	<script>
+		
+		var getSingle = function ( fn ){
+			var ret;
+			return function () {
+				return ret || ( ret = fn.apply( this, arguments ));
+			};
+
+		};
+		
+		var getArry = getSingle(function(){
+			return new Array(2);
+//			return document.createElement('script');
+		});
+		
+		var a1 = getArry();
+		var a2 = getArry();
+		
+		
+		$('li').on('click', function(){
+			$(this).addClass('animated bounceOutLeft');
+		})
+		
+		var CreateDiv = (function(){
+			var instance;
+			
+			var CreateDiv = function(html){
+				if( instance ){
+					return instance;
+				}
+				this.html = html;
+				this.init();
+				return instance = this;
+			}
+			
+			CreateDiv.prototype.init = function(){
+				var div = document.createElement('div');
+				div.innerHTML = this.html;
+				document.body.appendChild(div);
+			}
+			
+			return CreateDiv;
+		})();
+		
+		var a = new CreateDiv('我是div1');
+		var b = new CreateDiv('我是div2');
+		
+		var obj1 = {};
+		var obj2 = obj1;
+		obj1.a = 1000;
+		
+		console.log(1 === '1');
+		
+		var guangBo = {};
+		guangBo.users = {};
+		
+		guangBo.publish = function(){
+			
+			console.log('广播发布' + event + '了消息:' + meg);
+			
+			var evt = Array.shift.applay(arguments),
+				fns = this.users[evt];
+			
+			if( !fns || fns.length === 0){
+				return false;
+			}
+			
+			for(var i = 0, fn; fn = fns[i++];){
+				console.log(this);
+				fn.apply(this, arguments);
+			}
+			
+		}
+		
+		var user = {};
+		user.subscribe = function(author, event, fn){
+			
+			if(!guangBo.users[event]){
+				guangBo.users[event] = [];
+			}
+			guangBo.users[event].push(fn);
+		}
+		
+		user.unSubscribe = function(event){
+			guangBo.users[event]
+		}
+		
+		
+		user.subscribe('look', function(meg){
+			console.log('订阅了look天气预报：' + meg);
+		})
+		user.subscribe('look22', function(meg){
+			console.log('订阅了look22天气预报：' + meg);
+		})
+		
+		guangBo.publish('look', '下雨了11111');
+		guangBo.publish('look22', '下雨了2222');
+		
+	</script>
+</html>
